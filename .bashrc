@@ -4,15 +4,9 @@ case $- in
       *) return;;
 esac
 
-
-
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
-
-# If set, the pattern "**" used in a pathname expansion context will
-# match all files and zero or more directories and subdirectories.
-#shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -43,9 +37,6 @@ if [ -n "$force_color_prompt" ]; then
     fi
 fi
 
-PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;31m$(__git_ps1 " (%s)" )\e[m\n$ '
-
-
 # If this is an xterm set the title to user@host:dir
 case "$TERM" in
 xterm*|rxvt*)
@@ -67,33 +58,10 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-
-
-# Add an "alert" alias for long running commands.  Use like so:
-#   sleep 10; alert
-
-alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
-
-# Alias definitions.
-# You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
-# See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
-
-CFG="$HOME/etc/"
-
-if [ -f "$CFG/aliases" ]; then
-	        . "$CFG/aliases"
-	fi
-
-
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
 
-if [ -f ~/bin/kube-ps1.sh ]; then
-	. ~/bin/kube-ps1.sh
-fi
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -106,6 +74,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+LS_COLORS=$LS_COLORS:'or=5;41;34:di=40;4;31:ow=40;4;32'; export LS_COLORS
 
 # Tweak History for TMUX, give it a useful timestamp, 
 HISTTIMEFORMAT="%y-%m-%d %T "
@@ -114,28 +83,41 @@ HISTTIMEFORMAT="%y-%m-%d %T "
 HISTSIZE=2000
 HISTFILESIZE=4000
 
+# append to the history file, don't overwrite it
+shopt -s histappend
 
 # Important Step here - Ensure that we have Unique History by window 
 # Based on the Tmux Window Name
-
+if [ ! -d ${HOME}/.tmux/bash_history ]; then
+	mkdir -p ${HOME}/.tmux/bash_history
+fi
 if [[ $TMUX_PANE ]]; then
    HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
 fi
-
 # Make sure we save the prompt history at every step
 PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
 
 export EDITOR=vi
 
+if [ -f ~/bin/kube-ps1.sh ]; then
+	. ~/bin/kube-ps1.sh
+fi
 # Go/Kube Stuff
 export GOPATH=${HOME}/gocode
-source ${HOME}/bin/utils.bash
-kubeoff
-source <(kubectl completion bash)
-source <(stern --completion bash)
-
+if [ -f ${HOME}/bin/utils.bash ];  then
+	source ${HOME}/bin/utils.bash
+	kubeoff
+	source <(kubectl completion bash)
+	source <(stern --completion bash)
+	source ~/bin/st4
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;31m$(__git_ps1 " (%s)" )\e[m\n$ '
+else
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\n$ '
+fi
 # VirtualEnvWrappers are awesome for python
-source /usr/local/bin/virtualenvwrapper.sh
-export WORKON_HOME=~/.virtualenvs
-source ~/bin/st4
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+	export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
+	source /usr/local/bin/virtualenvwrapper.sh
+	export WORKON_HOME=~/.virtualenvs
+fi
 
