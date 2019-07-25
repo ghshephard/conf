@@ -63,6 +63,10 @@ if [ -f ~/.bash_aliases ]; then
 fi
 
 
+if [ -f ~/conf/aliases ]; then
+    . ~/conf/aliases
+fi
+
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
 # sources /etc/bash.bashrc).
@@ -102,11 +106,25 @@ export EDITOR=vi
 if [ -f ~/bin/kube-ps1.sh ]; then
 	. ~/bin/kube-ps1.sh
 fi
+
+alias k=kubectl
+
+
+alias knote="k exec -it `k get pods | egrep -i notebook | awk '{print $1}'` -- bash"
+
+# Some hyper useful sightmachine Kubernetes functions.
+if [ -f ~/conf/bash_kubecompletion.sh ]; then
+	. ~/conf/bash_kubecompletion.sh; 
+fi
 # Go/Kube Stuff
+
+
+export HELM_HOME=/home/shephard/.helm.
+
 export GOPATH=${HOME}/gocode
 if [ -f ${HOME}/bin/utils.bash ];  then
 	source ${HOME}/bin/utils.bash
-	kubeoff
+	kubeon
 	source <(kubectl completion bash)
 	source <(stern --completion bash)
 	source ~/bin/st4
@@ -116,7 +134,11 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-	export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
+	if [ -f /usr/bin/python3.6 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+	elif [ -f /usr/bin/python ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+	fi
 	source /usr/local/bin/virtualenvwrapper.sh
 	export WORKON_HOME=~/.virtualenvs
 fi
