@@ -158,9 +158,9 @@ function ings() {
   kubectl get ing $@
 }
 
-function pods() {
-  kubectl get pods $@
-}
+function pods () {
+	    kubectl get pods $@ | egrep -iv evicted
+    }
 
 function secrets() {
   kubectl get secrets $@
