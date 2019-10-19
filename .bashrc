@@ -110,7 +110,6 @@ fi
 alias k=kubectl
 
 
-alias knote="k exec -it `k get pods | egrep -i notebook | awk '{print $1}'` -- bash"
 
 # Some hyper useful sightmachine Kubernetes functions.
 if [ -f ~/conf/bash_kubecompletion.sh ]; then
@@ -128,7 +127,7 @@ if [ -f ${HOME}/bin/utils.bash ];  then
 	source <(kubectl completion bash)
 	source <(stern --completion bash)
 	source ~/bin/st4
-	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;31m$(__git_ps1 " (%s)" )\e[m\n$ '
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 else
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\n$ '
 fi
