@@ -129,7 +129,7 @@ if [ -f ${HOME}/bin/utils.bash ];  then
 	source ~/bin/st4
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 else
-	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\n$ '
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
