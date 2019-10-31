@@ -4,7 +4,7 @@ case $- in
       *) return;;
 esac
 
-export PATH=$PATH:${HOME}/bin
+export PATH=$PATH:${HOME}/bin:${HOME}/tempbin
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -146,3 +146,6 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	export WORKON_HOME=~/.virtualenvs
 fi
 
+if [ -x /usr/bin/ssh-agent ] ; then
+   eval `/usr/bin/ssh-agent`
+fi
