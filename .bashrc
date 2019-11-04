@@ -133,8 +133,10 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-	if [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+	if [ -f /usr/local/bin/python3.7 ]; then
+		# alias python=/usr/local/bin/python3.7
+		echo "Python3.7 virtualenvwrapper"
+		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.7
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
