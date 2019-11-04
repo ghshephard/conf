@@ -4,6 +4,8 @@ case $- in
       *) return;;
 esac
 
+export PATH=$PATH:${HOME}/bin:${HOME}/tempbin
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -129,14 +131,21 @@ if [ -f ${HOME}/bin/utils.bash ];  then
 	source ~/bin/st4
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 else
-	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\n$ '
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+<<<<<<< HEAD
 	if [ -f /usr/local/bin/python3.7 ]; then
 		# alias python=/usr/local/bin/python3.7
 		echo "Python3.7 virtualenvwrapper"
 		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.7
+=======
+	if [ -f /usr/bin/python3.6 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
+	elif [ -f /usr/bin/python3.7 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
+>>>>>>> 4ffdf3b397caf9a2024d635fd630d03b35cf37b4
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
@@ -144,3 +153,6 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	export WORKON_HOME=~/.virtualenvs
 fi
 
+if [ -x /usr/bin/ssh-agent ] ; then
+   eval `/usr/bin/ssh-agent`
+fi
