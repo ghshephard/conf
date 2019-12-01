@@ -135,10 +135,12 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-	if [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
-	elif [ -f /usr/bin/python3.7 ]; then
+  if [ -f /usr/bin/python3.8 ]; then
+    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.8
+	if [ -f /usr/bin/python3.7 ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
+	elif [ -f /usr/bin/python3.6 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
@@ -146,6 +148,9 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	export WORKON_HOME=~/.virtualenvs
 fi
 
-if [ -x /usr/bin/ssh-agent ] ; then
-   eval `/usr/bin/ssh-agent`
-fi
+#if [ -x /usr/bin/ssh-agent ] ; then
+#   eval /`usr/bin/ssh-agent`
+#fi
+
+/usr/bin/keychain --nogui $HOME/.ssh/id_sightmachine_gshephard
+source $HOME/.keychain/ghs-sh
