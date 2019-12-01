@@ -4,6 +4,8 @@ case $- in
       *) return;;
 esac
 
+export PATH=$PATH:${HOME}/bin:${HOME}/tempbin
+
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
@@ -134,7 +136,10 @@ fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	if [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
+	elif [ -f /usr/bin/python3.7 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
+>>>>>>> 4ffdf3b397caf9a2024d635fd630d03b35cf37b4
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
@@ -142,3 +147,6 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	export WORKON_HOME=~/.virtualenvs
 fi
 
+if [ -x /usr/bin/ssh-agent ] ; then
+   eval `/usr/bin/ssh-agent`
+fi
