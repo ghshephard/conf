@@ -134,7 +134,7 @@ fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	if [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
