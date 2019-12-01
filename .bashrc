@@ -139,7 +139,6 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
 	elif [ -f /usr/bin/python3.7 ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
->>>>>>> 4ffdf3b397caf9a2024d635fd630d03b35cf37b4
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
