@@ -99,9 +99,17 @@ if [ ! -d ${HOME}/.tmux/bash_history ]; then
 fi
 if [[ $TMUX_PANE ]]; then
    HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
+   PROMPT_COMMAND="fixshell; history -a;history -c;history -r;$PROMPT_COMMAND"
 fi
 # Make sure we save the prompt history at every step
-PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+
+
+fixshell () {
+	  HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
+  }
+  # Make sure we save the prompt history at every step
+
+ 
 
 export EDITOR=vi
 
@@ -135,24 +143,20 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-<<<<<<< HEAD
-	if [ -f /usr/local/bin/python3.7 ]; then
-		# alias python=/usr/local/bin/python3.7
-		echo "Python3.7 virtualenvwrapper"
-		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3.7
-=======
-	if [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
-	elif [ -f /usr/bin/python3.7 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
->>>>>>> 4ffdf3b397caf9a2024d635fd630d03b35cf37b4
+
+	if [ -f /usr/local/bin/python3 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3 
+
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
+	echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
 	source /usr/local/bin/virtualenvwrapper.sh
 	export WORKON_HOME=~/.virtualenvs
 fi
 
-if [ -x /usr/bin/ssh-agent ] ; then
-   eval `/usr/bin/ssh-agent`
+if  [ -x /usr/bin/ssh-agent ]  ; then
+   pgrep ssh-agent >/dev/null || eval `/usr/bin/ssh-agent`
 fi
+
+export PIP_REQUIRE_VIRTUALENV=true
