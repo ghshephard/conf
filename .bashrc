@@ -146,7 +146,6 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 
 	if [ -f /usr/local/bin/python3 ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3 
-
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
@@ -160,3 +159,4 @@ if  [ -x /usr/bin/ssh-agent ]  ; then
 fi
 
 export PIP_REQUIRE_VIRTUALENV=true
+
