@@ -106,17 +106,19 @@ if [ ! -d ${HOME}/.tmux/bash_history ]; then
 	mkdir -p ${HOME}/.tmux/bash_history
 fi
 
-fixshell () {
-  if [ $TMUX_PANE ]; then 
-     HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
-  else
-     HISTFILE=~/.tmux/bash_history/bash_history.common_no_tmux
-  fi
-}
-
+if [[ $TMUX_PANE ]]; then
+   HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
+   PROMPT_COMMAND="fixshell; history -a;history -c;history -r;$PROMPT_COMMAND"
+fi
 # Make sure we save the prompt history at every step
-PROMPT_COMMAND="fixshell; history -a;history -c;history -r;$PROMPT_COMMAND"
 
+
+fixshell () {
+	  HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
+  }
+  # Make sure we save the prompt history at every step
+
+ 
 export EDITOR=vi
 
 if [ -f ~/bin/kube-ps1.sh ]; then
@@ -149,15 +151,21 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-  export WORKON_HOME=~/.virtualenvs
-	export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-  source /usr/local/bin/virtualenvwrapper.sh
-  export PIP_REQUIRE_VIRTUALENV=true
+	if [ -f /usr/local/bin/python3 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3 
+	elif [ -f /usr/bin/python ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+	fi
+	echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
+	source /usr/local/bin/virtualenvwrapper.sh
+	export WORKON_HOME=~/.virtualenvs
 fi
 
-#if [ -x /usr/bin/ssh-agent ] ; then
-#   eval /`usr/bin/ssh-agent`
-#fi
+if  [ -x /usr/bin/ssh-agent ]  ; then
+   pgrep ssh-agent >/dev/null || eval `/usr/bin/ssh-agent`
+fi
+
+export PIP_REQUIRE_VIRTUALENV=true
 
 export EDITOR=vi
 /usr/bin/keychain -q --nogui $HOME/.ssh/id_sightmachine_gshephard
