@@ -1,3 +1,4 @@
+# March 7th, 2020
 # If not running interactively, don't do anything
 case $- in
     *i*) ;;
@@ -5,6 +6,13 @@ case $- in
 esac
 
 export PATH=$PATH:${HOME}/bin:${HOME}/tempbin
+
+# WSL STUFF:
+
+if [[ `uname -r` == *"microsoft"* ]]; then
+   alias subl=subl.exe
+fi
+
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
@@ -97,11 +105,17 @@ shopt -s histappend
 if [ ! -d ${HOME}/.tmux/bash_history ]; then
 	mkdir -p ${HOME}/.tmux/bash_history
 fi
-if [[ $TMUX_PANE ]]; then
-   HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
-fi
+
+fixshell () {
+  if [ $TMUX_PANE ]; then 
+     HISTFILE=~/.tmux/bash_history/bash_history.$(tmux display-message -p '#W')
+  else
+     HISTFILE=~/.tmux/bash_history/bash_history.common_no_tmux
+  fi
+}
+
 # Make sure we save the prompt history at every step
-PROMPT_COMMAND="history -a;history -c;history -r;$PROMPT_COMMAND"
+PROMPT_COMMAND="fixshell; history -a;history -c;history -r;$PROMPT_COMMAND"
 
 export EDITOR=vi
 
@@ -135,22 +149,23 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-  if [ -f /usr/bin/python3.8 ]; then
-    export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.8
-	if [ -f /usr/bin/python3.7 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.7
-	elif [ -f /usr/bin/python3.6 ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3.6
-	elif [ -f /usr/bin/python ]; then
-		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
-	fi
-	source /usr/local/bin/virtualenvwrapper.sh
-	export WORKON_HOME=~/.virtualenvs
+  export WORKON_HOME=~/.virtualenvs
+	export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
+  source /usr/local/bin/virtualenvwrapper.sh
+  export PIP_REQUIRE_VIRTUALENV=true
 fi
 
 #if [ -x /usr/bin/ssh-agent ] ; then
 #   eval /`usr/bin/ssh-agent`
 #fi
 
-/usr/bin/keychain --nogui $HOME/.ssh/id_sightmachine_gshephard
+export EDITOR=vi
+/usr/bin/keychain -q --nogui $HOME/.ssh/id_sightmachine_gshephard
+/usr/bin/keychain -q --nogui $HOME/.ssh/aurora_519key
+#ssh-add ${HOME}/.ssh/aurora_519key 
 source $HOME/.keychain/ghs-sh
+
+
+
+#kubectx and kubens
+export PATH=~/.kubectx:$PATH
