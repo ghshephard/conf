@@ -28,3 +28,4 @@ alias use-minikube='kubectl config use-context minikube'
 alias use-uw1a-gcp='kubectl config use-context k8s-uw1a-gcp'
 alias use-uw1c-gcp='kubectl config use-context k8s-uw1c-gcp'
 alias voltron='cd /opt/sightmachine/voltron'
+
