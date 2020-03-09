@@ -156,7 +156,7 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
-	echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
+	#echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
 	source /usr/local/bin/virtualenvwrapper.sh
 	export WORKON_HOME=~/.virtualenvs
 fi
