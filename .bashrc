@@ -161,17 +161,19 @@ if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
 	export WORKON_HOME=~/.virtualenvs
 fi
 
-if  [ -x /usr/bin/ssh-agent ]  ; then
+if [ -f /usr/bin/keychain ]; then
+    /usr/bin/keychain -q --nogui $HOME/.ssh/privkeys/*
+    #/usr/bin/keychain -q --nogui $HOME/.ssh/aurora_519key
+    #ssh-add ${HOME}/.ssh/aurora_519key 
+    source $HOME/.keychain/ghs-sh
+elif  [ -x /usr/bin/ssh-agent ]  ; then
+echo agent
    pgrep ssh-agent >/dev/null || eval `/usr/bin/ssh-agent`
 fi
 
 export PIP_REQUIRE_VIRTUALENV=true
 
 export EDITOR=vi
-/usr/bin/keychain -q --nogui $HOME/.ssh/id_sightmachine_gshephard
-/usr/bin/keychain -q --nogui $HOME/.ssh/aurora_519key
-#ssh-add ${HOME}/.ssh/aurora_519key 
-source $HOME/.keychain/ghs-sh
 
 
 
