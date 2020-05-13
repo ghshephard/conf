@@ -150,32 +150,50 @@ else
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 fi
 # VirtualEnvWrappers are awesome for python
+
+
+# Depending on how it was installed - virtualenvwrappers can be anywhere - let's find it.
+# A lot of this stuff isn't in our normal $PATH
+
 if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+  VPATH=/usr/local/bin/virtualenvwrapper.sh
+elif [ -f ${HOME}/.local/bin/virtualenvwrapper.sh ]; then
+  VPATH= ${HOME}/.local/bin/virtualenvwrapper.sh
+else
+  VPATH=""
+fi
+
+
+# If we were able to set VPATH to anything not null
+if [ -n "$VPATH" ]; then
+        # Kind of a judgement call what order to look - custom python3, system3 python3, system python2 is my prference
 	if [ -f /usr/local/bin/python3 ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3 
+	elif [ -f /usr/bin/python3 ]; then
+		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
 	elif [ -f /usr/bin/python ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
 	#echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
-	source /usr/local/bin/virtualenvwrapper.sh
+	source $VPATH 
 	export WORKON_HOME=~/.virtualenvs
 fi
 
+# Only use keychain if it's been installed - my WSL system mostly - otherwise ssh-agent is the goto
 if [ -f /usr/bin/keychain ]; then
     /usr/bin/keychain -q --nogui $HOME/.ssh/privkeys/*
     #/usr/bin/keychain -q --nogui $HOME/.ssh/aurora_519key
     #ssh-add ${HOME}/.ssh/aurora_519key 
     source $HOME/.keychain/ghs-sh
 elif  [ -x /usr/bin/ssh-agent ]  ; then
-echo agent
    pgrep ssh-agent >/dev/null || eval `/usr/bin/ssh-agent`
 fi
 
+# Don't let people touch anything in the root environment
 export PIP_REQUIRE_VIRTUALENV=true
 
+# ALways set the editor to vi.
 export EDITOR=vi
-
-
 
 #kubectx and kubens
 export PATH=~/.kubectx:$PATH
