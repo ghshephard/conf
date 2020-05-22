@@ -5,7 +5,15 @@ case $- in
       *) return;;
 esac
 
-export PATH=$PATH:${HOME}/bin:${HOME}/tempbin
+case ":$PATH:" in
+	*":${HOME}/.local/bin:"*) :;;
+	*) PATH="${HOME}/.local/bin:$PATH";;
+esac
+
+case ":$PATH:" in
+	*":${HOME}/bin:"*) :;;
+	*) PATH="${HOME}/bin:$PATH";;
+esac
 
 # WSL STUFF:
 
@@ -30,6 +38,17 @@ fi
 case "$TERM" in
     xterm-color|*-256color) color_prompt=yes;;
 esac
+
+# Color Scheme for man pages - 2020/05/14
+# from: https://www.tecmint.com/view-colored-man-pages-in-linux/
+export LESS_TERMCAP_mb=$'\e[1;32m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_so=$'\e[01;33m'
+export LESS_TERMCAP_ue=$'\e[0m'
+export LESS_TERMCAP_us=$'\e[1;4;31m'
+
 
 # uncomment for a colored prompt, if the terminal has the capability; turned
 # off by default to not distract the user: the focus in a terminal window
@@ -139,7 +158,13 @@ fi
 export HELM_HOME=/home/shephard/.helm.
 
 export GOPATH=${HOME}/gocode
+
+# bin/utils says this is a work system - add kube,stern/etc..
 if [ -f ${HOME}/bin/utils.bash ];  then
+	case ":$PATH:" in
+		*":${HOME}/.kubectx:"*) :;;
+		*) PATH="${HOME}/.kubectx:$PATH";;
+	esac
 	source ${HOME}/bin/utils.bash
 	kubeon
 	source <(kubectl completion bash)
@@ -151,21 +176,7 @@ else
 fi
 # VirtualEnvWrappers are awesome for python
 
-
-# Depending on how it was installed - virtualenvwrappers can be anywhere - let's find it.
-# A lot of this stuff isn't in our normal $PATH
-
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-  VPATH=/usr/local/bin/virtualenvwrapper.sh
-elif [ -f ${HOME}/.local/bin/virtualenvwrapper.sh ]; then
-  VPATH= ${HOME}/.local/bin/virtualenvwrapper.sh
-else
-  VPATH=""
-fi
-
-
-# If we were able to set VPATH to anything not null
-if [ -n "$VPATH" ]; then
+if [ -x "$(command -v virtualenvwrapper.sh)" ]; then
         # Kind of a judgement call what order to look - custom python3, system3 python3, system python2 is my prference
 	if [ -f /usr/local/bin/python3 ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/local/bin/python3 
@@ -175,7 +186,7 @@ if [ -n "$VPATH" ]; then
 		export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python
 	fi
 	#echo "Set VirtualEnvWrapper to ${VIRTUALENVWRAPPER_PYTHON}"
-	source $VPATH 
+	source "$(command -v virtualenvwrapper.sh)" 
 	export WORKON_HOME=~/.virtualenvs
 fi
 
@@ -196,4 +207,3 @@ export PIP_REQUIRE_VIRTUALENV=true
 export EDITOR=vi
 
 #kubectx and kubens
-export PATH=~/.kubectx:$PATH
