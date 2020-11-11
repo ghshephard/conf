@@ -15,6 +15,14 @@ case ":$PATH:" in
 	*) PATH="${HOME}/bin:$PATH";;
 esac
 
+# Ubuntu Cleanup Key Suff
+
+if [[ "$(lsb_release -d)" == *"Ubuntu"* ]]; then 
+	# Remap Center Mouse Button (12 from xinput list) - L C R = L L R.
+	xinput set-button-map 12 1 1 3
+
+fi
+
 # WSL STUFF:
 
 if [[ `uname -r` == *"microsoft"* ]]; then
@@ -145,6 +153,13 @@ if [ -f ~/bin/kube-ps1.sh ]; then
 fi
 
 alias k=kubectl
+
+if [ -d ${HOME}/bin/balena-cli ]; then
+	case ":$PATH:" in
+		*":${HOME}/bin/balena-cli:"*) :;;
+		*) PATH="${HOME}/bin/balena-cli:$PATH";;
+	esac
+fi
 
 
 
