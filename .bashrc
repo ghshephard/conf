@@ -78,7 +78,6 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    unalias ls
     # alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
@@ -89,9 +88,11 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 #for *BSD/darwin
-export CLICOLOR=1
 
-ls --color=auto &> /dev/null && alias ls='ls --color=auto'
+if [ $(uname) == "Darwin" ]; then 
+  export CLICOLOR=YES
+  export LSCOLORS="Gxfxcxdxbxegedabagacad"
+fi
 
 
 
