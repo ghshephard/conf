@@ -78,7 +78,8 @@ esac
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto'
+    unalias ls
+    # alias ls='ls --color=auto'
     #alias dir='dir --color=auto'
     #alias vdir='vdir --color=auto'
 
@@ -86,6 +87,13 @@ if [ -x /usr/bin/dircolors ]; then
     alias fgrep='fgrep --color=auto'
     alias egrep='egrep --color=auto'
 fi
+
+#for *BSD/darwin
+export CLICOLOR=1
+
+ls --color=auto &> /dev/null && alias ls='ls --color=auto'
+
+
 
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
@@ -106,6 +114,16 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+
+# My new BigSur Mac system has bash stuff in weird places. 
+# I'm using the brew install shell stuff here
+
+if [ -d "/usr/local/etc/bash_completion.d/" ]; then
+   source /usr/local/etc/bash_completion.d/git-prompt.sh
+   source /usr/local/etc/bash_completion.d/git-completion.bash
+fi
+
 
 LS_COLORS=$LS_COLORS:'or=5;41;34:di=40;4;31:ow=40;4;32'; export LS_COLORS
 
@@ -147,12 +165,13 @@ fi
 alias k=kubectl
 
 
-
 # Some hyper useful sightmachine Kubernetes functions.
 if [ -f ~/conf/bash_kubecompletion.sh ]; then
 	. ~/conf/bash_kubecompletion.sh; 
 fi
 # Go/Kube Stuff
+
+
 
 
 export HELM_HOME=/home/shephard/.helm.
@@ -172,7 +191,7 @@ if [ -f ${HOME}/bin/utils.bash ];  then
 	source ~/bin/st4
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 else
-	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
+	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;92m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 fi
 # VirtualEnvWrappers are awesome for python
 
@@ -199,7 +218,6 @@ if [ -f /usr/bin/keychain ]; then
 elif  [ -x /usr/bin/ssh-agent ]  ; then
    pgrep ssh-agent >/dev/null || eval `/usr/bin/ssh-agent`
 fi
-
 # Don't let people touch anything in the root environment
 export PIP_REQUIRE_VIRTUALENV=true
 
