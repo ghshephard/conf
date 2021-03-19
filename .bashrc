@@ -152,6 +152,10 @@ if [ -f ~/bin/kube-ps1.sh ]; then
 	. ~/bin/kube-ps1.sh
 fi
 
+if [ -f ~/conf/functions ]; then
+	. ~/conf/functions 
+fi
+
 alias k=kubectl
 
 if [ -d ${HOME}/bin/balena-cli ]; then
@@ -185,6 +189,7 @@ if [ -f ${HOME}/bin/utils.bash ];  then
 	source <(kubectl completion bash)
 	source <(stern --completion bash)
 	source ~/bin/st4
+	source ${HOME}/conf/kubefunctions
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(kube_ps1)\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
 else
 	PS1='\D{%F %T}: ${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\e[m\e[0;93m$(__git_ps1 " (%s)" )\e[m\n$ '
@@ -222,3 +227,10 @@ export PIP_REQUIRE_VIRTUALENV=true
 export EDITOR=vi
 
 #kubectx and kubens
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/shephard/Downloads/google-cloud-sdk/path.bash.inc' ]; then . '/home/shephard/Downloads/google-cloud-sdk/path.bash.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/shephard/Downloads/google-cloud-sdk/completion.bash.inc' ]; then . '/home/shephard/Downloads/google-cloud-sdk/completion.bash.inc'; fi
+

@@ -1,0 +1,28 @@
+azwest ()
+{
+        export KUBECONFIG=~/.kube/ake-prod-westrock.yaml
+        kubectx ake-prod-westrock
+
+}
+
+azgen ()
+{
+        export KUBECONFIG=~/.kube/ake-prod1-uw.yaml
+        kubectx ake-prod1-uw
+
+}
+
+azgcp ()
+{
+        export KUBECONFIG=~/.kube/k8s-gcp.yaml
+        kubectx k8s-uw1c-gcp
+
+}
+
+jclean() {
+   for var in "$@"
+   do
+      jupyter nbconvert $1 --ClearOutputPreprocessor.enabled=True --inplace
+   done
+}
+ 

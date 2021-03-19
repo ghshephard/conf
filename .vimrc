@@ -1,1 +1,1 @@
-color desert
+/home/shephard/.vimrc
